@@ -1,0 +1,360 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg fixed-top" style="background: linear-gradient(90deg, #f8bbd0, #f48fb1);">
+  <div class="container-fluid">
+    <!-- Logo & Brand -->
+    <a class="navbar-brand d-flex align-items-center me-3" href="{% url 'home' %}">
+      <img src="{% static 'images/books-logo.png' %}" alt="Logo" width="36" height="36" class="rounded-circle border border-white shadow-sm me-2" style="object-fit: cover;">
+      <span class="fs-5 fw-bold text-white" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Noor Al Qalam</span>
+    </a>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler btn btn-pink btn-sm text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Left Menu -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link text-white fw-semibold" href="{% url 'book_list' %}">📚 Books</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white fw-semibold" href="{% url 'about' %}">ℹ️ About</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ➕ Admin
+          </a>
+          <ul class="dropdown-menu dropdown-menu-pink">
+            <li><a class="dropdown-item" href="{% url 'book_account' %}">📚 My Books</a></li>
+            <li><a class="dropdown-item" href="{% url 'book_new' %}">➕ Add Book</a></li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+
+      <!-- Buttons -->
+      <div class="d-flex align-items-center gap-2 me-3 flex-wrap">
+        <a class="btn btn-outline-light btn-sm" href="{% url 'cover_recognition' %}">Cover</a>
+        <a class="btn btn-outline-light btn-sm" href="{% url 'sentiment_analysis' %}">Sentiment</a>
+        <a class="btn btn-outline-light btn-sm" href="{% url 'recommend' %}">Recommend</a>
+        <a class="btn btn-outline-light btn-sm" href="{% url 'sales_prediction' %}">Sales</a>
+      </div>
+
+      <!-- Search -->
+      <form class="d-flex me-3" action="{% url 'search_results' %}" method="get" style="min-width:180px;">
+        <input class="form-control form-control-sm rounded-pill border-0 shadow-sm" type="search" minlength="1" name="q"
+          placeholder="🔍 Search..." aria-label="Search" required>
+      </form>
+
+      <!-- Sort -->
+      <form method="get" action="{% url 'book_list' %}" class="me-3" style="min-width:150px;">
+        <select class="form-select form-select-sm rounded-pill shadow-sm" name="sort" onchange="this.form.submit()" aria-label="Sort Books">
+          <option value="" disabled selected>🔄 Sort</option>
+          <option value="price_asc">🌸 Price ↑</option>
+          <option value="price_desc">🌺 Price ↓</option>
+          <option value="rating">❤️ Rating</option>
+          <option value="newest">🆕 Newest</option>
+          <option value="oldest">📅 Oldest</option>
+          <option value="author">👤 Author A-Z</option>
+          <option value="title">📖 Title A-Z</option>
+        </select>
+      </form>
+
+      <!-- Icons -->
+      <ul class="navbar-nav d-flex align-items-center me-3 gap-2">
+        <li class="nav-item">
+          <a class="btn btn-outline-light btn-sm rounded-pill shadow-sm" href="{% url 'cart_page' %}" title="Cart" style="min-width: 40px;">
+            🛒
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="https://yandex.uz/maps/org/240253766297/" target="_blank"
+            class="btn btn-outline-light btn-sm rounded-pill shadow-sm" title="Location" style="width: 36px; height: 36px; display:flex; justify-content:center; align-items:center;">
+            📍
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'favorite_list' %}" class="btn btn-outline-light btn-sm rounded-pill shadow-sm" title="Favorites" style="width: 36px; height: 36px; display:flex; justify-content:center; align-items:center;">
+            ❤️
+          </a>
+        </li>
+      </ul>
+
+      <!-- Account Dropdown -->
+      <div class="btn-group">
+        <button type="button" class="btn btn-light btn-sm rounded-pill dropdown-toggle shadow-sm fw-semibold" data-bs-toggle="dropdown" aria-expanded="false" style="color:#d6336c;">
+          👪 Account
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-pink">
+          {% if user.is_authenticated %}
+          <li><a class="dropdown-item" href="{% url 'account_profile' %}">👤 Profile</a></li>
+          <li><a class="dropdown-item" href="{% url 'account_change_password' %}">🔑 Change Password</a></li>
+          <li><a class="dropdown-item" href="{% url 'account_email' %}">✉️ Email</a></li>
+          <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}">🚪 Logout</a></li>
+          {% else %}
+          <li><a class="dropdown-item text-success" href="{% url 'account_login' %}">🔓 Login</a></li>
+          <li><a class="dropdown-item text-primary" href="{% url 'account_signup' %}">✍️ Signup</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+  /* Pink gradient background */
+  .navbar {
+    transition: background-color 0.3s ease;
+  }
+
+  /* Dropdown pink menu */
+  .dropdown-menu-pink {
+    background: #fce4ec;
+    border-radius: 12px;
+    border: 1px solid #f8bbd0;
+    box-shadow: 0 8px 16px rgba(244, 143, 177, 0.4);
+  }
+
+  .dropdown-menu-pink .dropdown-item {
+    color: #ad1457;
+    font-weight: 600;
+  }
+
+  .dropdown-menu-pink .dropdown-item:hover {
+    background-color: #f8bbd0;
+    color: white;
+    border-radius: 8px;
+  }
+
+  /* Navbar toggler button */
+  .navbar-toggler {
+    background-color: #d6336c;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+  }
+
+  .navbar-toggler:hover {
+    background-color: #a0254c;
+  }
+
+  .navbar-toggler-icon {
+    filter: invert(1);
+  }
+
+  /* Buttons pink */
+  .btn-pink {
+    background-color: #d6336c;
+    color: white;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-pink:hover {
+    background-color: #a0254c;
+    color: white;
+  }
+
+  /* Search input */
+  input.form-control:focus {
+    border-color: #d6336c;
+    box-shadow: 0 0 8px #f48fb1;
+  }
+
+  /* Sort select */
+  select.form-select:focus {
+    border-color: #d6336c;
+    box-shadow: 0 0 8px #f48fb1;
+  }
+
+  /* Icons buttons small */
+  .btn-outline-light {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .btn-outline-light:hover {
+    background-color: #d6336c;
+    color: white;
+  }
+</style>
+
+
+
+{% comment %} {% load static %}
+<nav class="navbar navbar-expand-lg fixed-top" style="background: linear-gradient(90deg, #f8bbd0, #f48fb1);">
+    <div class="container-fluid">
+        <!-- Logo va Nom -->
+        <a class="navbar-brand d-flex align-items-center me-3" href="{% url 'home' %}">
+            <img src="{% static 'images/books-logo.png' %}" alt="Logo bookstore" width="40" height="40" class="d-inline-block align-text-top me-2 rounded-circle border border-white shadow-sm">
+            <h1 class="fs-4 mb-0 d-inline-block fw-bold text-white" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Noor Al Qalam</h1>
+        </a>
+
+        <!-- Togglable Menu -->
+        <button class="navbar-toggler btn btn-pink btn-sm text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Menu Items -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-semibold" href="{% url 'book_list' %}">📚 Books</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fw-semibold" href="{% url 'about' %}">ℹ️ About Us</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        ➕ 
+                        Admin Panel
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-pink">
+                        <li><a class="dropdown-item" href="{% url 'book_account' %}">📚 My Books</a></li>
+                        <li><a class="dropdown-item" href="{% url 'book_new' %}">➕ Add Book</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+
+            
+            <a class="btn btn-outline-primary me-2" href="{% url 'cover_recognition' %}">Muqova tanib olish</a>
+            <a class="btn btn-outline-primary me-2" href="{% url 'sentiment_analysis' %}">sentiment analysis</a>
+            <a class="btn btn-outline-primary me-2" href="{% url 'recommend' %}">recommend books</a>
+            <a class="btn btn-outline-primary me-2" href="{% url 'sales_prediction' %}">Sotilish bashorati</a>
+
+
+            <!-- Search Bar -->
+            <form class="d-flex me-2" action="{% url 'search_results' %}" method="get">
+                <input class="form-control form-control-sm rounded-pill border-0 shadow-sm" type="search" minlength="1" name="q"
+                    placeholder="🔍 Search..." aria-label="Search" required style="width: 200px;">
+            </form>
+
+            <!-- Sort By -->
+            <form method="get" action="{% url 'book_list' %}" class="me-3">
+                <select class="form-select form-select-sm rounded-pill shadow-sm" name="sort" onchange="this.form.submit()" aria-label="Sort Books" style="min-width: 130px;">
+                    <option value="" disabled selected>🔄 Sort</option>
+                    <option value="price_asc">💲 Price ↑</option>
+                    <option value="price_desc">💲 Price ↓</option>
+                    <option value="rating">⭐ Rating</option>
+                    <option value="newest">🆕 Newest</option>
+                    <option value="oldest">📅 Oldest</option>
+                    <option value="author">📝 Author A-Z</option>
+                    <option value="title">📖 Title A-Z</option>
+                </select>
+            </form>
+
+            <!-- Icons (Cart, Location, Favorites) -->
+            <ul class="navbar-nav d-flex align-items-center me-3">
+                <li class="nav-item me-2">
+                    <a class="btn btn-outline-light btn-sm rounded-pill shadow-sm fw-semibold" href="{% url 'cart_page' %}" title="Savatcha" style="min-width: 90px;">
+                        🛒
+                    </a>
+                </li>
+
+                <li class="nav-item me-2">
+                    <a href="https://yandex.uz/maps/org/240253766297/" target="_blank"
+                        class="btn btn-outline-light btn-sm rounded-pill shadow-sm" title="Location" style="width: 40px; height: 36px; display:flex; justify-content:center; align-items:center;">
+                        📍
+                    </a>
+                </li>
+
+                <li class="nav-item me-3">
+                    <a href="{% url 'favorite_list' %}" class="btn btn-outline-light btn-sm rounded-pill shadow-sm" title="Favorites" style="width: 40px; height: 36px; display:flex; justify-content:center; align-items:center;">
+                        ❤️
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Account Dropdown -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-light btn-sm rounded-pill dropdown-toggle shadow-sm fw-semibold" data-bs-toggle="dropdown"
+                    aria-expanded="false" style="color:#d6336c;">
+                    👪 Account
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-pink">
+                    {% if user.is_authenticated %}
+                    <li><a class="dropdown-item" href="{% url 'account_profile' %}">👤 Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'account_change_password' %}">🔑 Change Password</a></li>
+                    <li><a class="dropdown-item" href="{% url 'account_email' %}">✉️ Email Config</a></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}">🚪 Log Out</a></li>
+                    {% else %}
+                    <li><a class="dropdown-item text-success" href="{% url 'account_login' %}">🔓 Log In</a></li>
+                    <li><a class="dropdown-item text-primary" href="{% url 'account_signup' %}">✍️ Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<style>
+    /* Maxsus rangli dropdown menyu */
+    .dropdown-menu-pink {
+        background: #fce4ec;
+        border-radius: 12px;
+        border: 1px solid #f8bbd0;
+        box-shadow: 0 8px 16px rgba(244, 143, 177, 0.4);
+    }
+    .dropdown-menu-pink .dropdown-item {
+        color: #ad1457;
+        font-weight: 600;
+    }
+    .dropdown-menu-pink .dropdown-item:hover {
+        background-color: #f8bbd0;
+        color: white;
+        border-radius: 8px;
+    }
+
+    /* Togglable button */
+    .navbar-toggler {
+        background-color: #d6336c;
+        border-radius: 12px;
+    }
+    .navbar-toggler-icon {
+        filter: invert(1);
+    }
+
+    /* Pastel pink buttons */
+    .btn-pink {
+        background-color: #d6336c;
+        color: white;
+        border-radius: 12px;
+        transition: background-color 0.3s ease;
+    }
+    .btn-pink:hover {
+        background-color: #a0254c;
+        color: white;
+    }
+
+    /* Search input */
+    input.form-control:focus {
+        border-color: #d6336c;
+        box-shadow: 0 0 8px #f48fb1;
+    }
+
+    /* Sort select */
+    select.form-select:focus {
+        border-color: #d6336c;
+        box-shadow: 0 0 8px #f48fb1;
+    }
+
+     /* Planner buttons styling */
+    .planner-btn {
+        background-color: #d6336c;
+        color: white;
+        border-color: #f8bbd0;
+        transition: all 0.3s ease;
+        padding: 4px 12px;
+    }
+
+    .planner-btn:hover {
+        background-color: #a0254c;
+        border-color: #a0254c;
+    }
+</style>
+ {% endcomment %}

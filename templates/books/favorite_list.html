@@ -1,0 +1,82 @@
+{% extends '_base.html' %}
+{% block title %}Favorite Books{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="background-color: #ffb6c1; border-radius: 20px; padding: 30px;">
+    <h2 class="text-center mb-4 gradient-text glow-text" style="font-size: 2.5rem; color: #880e4f;">Favorite Books 📚❤️</h2>
+    {% if favorites %}
+        <div class="row">
+            {% for favorite in favorites %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg glass-effect animate-card">
+                        <img src="{{ favorite.book.cover.url }}" class="card-img-top rounded-top" alt="{{ favorite.book.title }}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title gradient-text" style="color: #880e4f;">{{ favorite.book.title }}</h5>
+                            <p class="card-text"><strong>Author:</strong> {{ favorite.book.author }}</p>
+                            <p class="card-text"><strong>Price:</strong> ${{ favorite.book.price }}</p>
+                            
+                            <!-- Buy Now Form -->
+                            <form method="POST" action="{% url 'add_to_cart' favorite.book.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn neon-button mb-2 animate-button">🛒 Buy Now</button>
+                            </form>
+
+                            
+                            {% comment %} {# 
+                            <form method="post" action="{% url 'remove_from_favorites' favorite.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn neon-button mb-2 animate-button">❤️ Remove from Favorites</button>
+                            </form>
+                            #} {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center glass-effect animate-card">
+            You haven't added any books to your favorites yet. 
+            <a href="{% url 'book_list' %}" class="btn neon-button animate-button mt-3">📚 Browse other books</a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .animate-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .animate-card:hover {
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 10px 25px rgba(255, 105, 180, 0.5);
+    }
+
+    .neon-button {
+        background: linear-gradient(45deg, #ff6f61, #ffb347);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.7);
+        transition: all 0.2s ease-in-out;
+        padding: 10px 20px;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .neon-button:hover {
+        box-shadow: 0 8px 25px rgba(255, 105, 180, 0.9);
+        transform: translateY(-2px);
+        color: white;
+        text-decoration: none;
+    }
+
+    .glass-effect {
+        backdrop-filter: blur(5px);
+        background: rgba(255, 182, 193, 0.3); /* lightpink with some transparency */
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}

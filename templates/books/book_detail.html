@@ -1,0 +1,307 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% load random_rgba_color %}
+
+{% block title %}
+{{ book.title }}
+{% endblock title %}
+
+{% block content %}
+<style>
+  /* GIRLY PASTEL THEME */
+  body {
+    background: #fff0f6; /* soft pinkish */
+    font-family: 'Poppins', sans-serif;
+    color: #4a3f35;
+  }
+
+  h2, h3, h4, h6 {
+    font-family: 'Dancing Script', cursive;
+    color: #d6336c; /* rich pink */
+    letter-spacing: 0.05em;
+  }
+
+  a {
+    color: #d6336c;
+    transition: color 0.3s ease;
+  }
+
+  a:hover, a:focus {
+    color: #9d174d;
+    text-decoration: none;
+  }
+
+  .breadcrumb a {
+    color: #b83e5e;
+    font-weight: 600;
+  }
+
+  .breadcrumb a:hover {
+    color: #d6336c;
+  }
+
+  /* Container and border styles */
+  .border {
+    border-color: #f3c6d5 !important;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(214, 51, 108, 0.2);
+    background: #fff0f6;
+  }
+
+  /* Image styling and animation */
+  img.img-thumbnail {
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(214, 51, 108, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  img.img-thumbnail:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(214, 51, 108, 0.5);
+  }
+
+  /* Modal styling */
+  .modal-content.bg-dark {
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    border-radius: 16px;
+  }
+
+  .modal-header {
+    border-bottom: none;
+    color: #9d174d;
+  }
+  .btn-close.bg-white {
+    filter: drop-shadow(0 0 2px #9d174d);
+  }
+
+  /* Buttons styling */
+  .btn-secondary.dropdown-toggle {
+    background: #f8bbd0;
+    color: #6f1d4f;
+    font-weight: 700;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(214, 51, 108, 0.25);
+  }
+  .btn-secondary.dropdown-toggle:hover {
+    background: #d6336c;
+    color: white;
+  }
+  .dropdown-menu {
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(214, 51, 108, 0.3);
+    background: #ffe6f0;
+  }
+  .dropdown-item.btn-outline-success:hover {
+    background-color: #d6336c;
+    color: white;
+  }
+  .dropdown-item.btn-outline-danger:hover {
+    background-color: #9d174d;
+    color: white;
+  }
+
+  /* Review section */
+  .reviews-section {
+    background: #fff0f6;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 6px 12px rgba(214, 51, 108, 0.15);
+  }
+  .reviews-section h3 {
+    font-weight: 700;
+  }
+  .review-item {
+    background: #fce4ec;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 3px 6px rgba(214, 51, 108, 0.1);
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  .review-item h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #9d174d;
+  }
+
+  /* Form styling */
+  form.m-2 {
+    background: #ffe6f0;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(214, 51, 108, 0.2);
+  }
+
+  /* Button animations */
+  button.btn-success {
+    background: #d6336c;
+    border: none;
+    border-radius: 30px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 700;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  button.btn-success:hover {
+    background: #9d174d;
+    transform: scale(1.1);
+  }
+
+  button.btn-danger {
+    border-radius: 30px;
+    font-weight: 700;
+  }
+  button.btn-danger:hover {
+    background: #6f1d4f;
+    color: white;
+  }
+
+  /* Title styling */
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .flex-sm-row {
+      flex-direction: column !important;
+    }
+    img.img-thumbnail {
+      max-width: 100% !important;
+    }
+  }
+</style>
+
+<div class="mx-auto d-flex flex-column w-100 align-items-center justify-content-start" style="max-width: 80em;">
+
+    <nav class="my-3 container d-flex justify-content-start" aria-label="breadcrumb" style="width:100%;">
+        <ol class="m-0 breadcrumb bg-transparent p-0">
+            <li class="p-0 breadcrumb-item"><a href="{% url 'book_list' %}">Recent Books</a></li>
+            <li class="p-0 breadcrumb-item active" aria-current="page">{{ book.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="w-100 d-flex flex-column justify-content-center align-items-center align-items-sm-start flex-sm-row border p-3" style="max-width: 50em; background: #fff0f6;">
+
+        {% if book.cover %}
+        <div class="me-sm-4 mb-3 mb-sm-0" style="flex-shrink: 0;">
+            <picture class="d-block w-100 p-1 bg-transparent rounded-3">
+                <img type="button" class="d-block mx-auto w-100 img-fluid img-thumbnail shadow-sm" style="max-width: 30em; border-radius: 16px;"
+                    src="{{ book.cover.url}}" alt="{{ book.title }}" data-bs-toggle="modal"
+                    data-bs-target="#imageModal" loading="lazy" decoding="async">
+            </picture>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content bg-dark p-3 rounded-4">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title text-pink" id="imageModalLabel">{{ book.title }}</h5>
+                        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <picture class="w-100 p-1">
+                        <img class="d-block mx-auto img-fluid img-thumbnail shadow" style="border-radius: 20px;" src="{{ book.cover.url}}" alt="{{ book.title }}" loading="lazy" decoding="async">
+                    </picture>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <article class="border w-100 d-flex justify-content-center align-items-center fs-5 fw-bold text-center rounded-4" style="max-width:15em; min-height: 20em; background-color: {% random_rgba_color 0.5 %} ; box-shadow: 0 4px 8px rgba(214, 51, 108, 0.2);">
+            {{ book.title|truncatechars:35 }}
+        </article>
+        {% endif %}
+
+        <div class="d-flex w-100 h-100 justify-content-center flex-column p-3" style="color:#4a3f35;">
+            <h2>{{ book.title|title }}</h2>
+            <div class="d-flex pb-2 align-items-center gap-2 flex-wrap">Author:
+                <form class="d-flex w-auto" action="{% url 'search_results' %}" method="get">
+                    <input type="hidden" minlength="1" name="q" value="{{ book.author }}"
+                        placeholder="Search by title or author" aria-label="Search" required>
+                    <input class="border-0 link-secondary bg-transparent text-decoration-underline text-primary fw-semibold"
+                        style="outline:none; cursor:pointer;" type="submit" value="{{ book.author }}" />
+                </form>
+            </div>
+            <p class="p-0 mb-1 fw-semibold">Price: <span class="text-pink">${{ book.price }}</span></p>
+            <p class="p-0 mb-1">
+                Creation: <time datetime="{{ book.date_creation }}">{{ book.date_creation|date:"d-m-Y" }} {{ book.date_creation|time:"h:iA" }}</time>
+            </p>
+            <div class="w-100 mt-auto d-flex justify-content-end">
+                <p class="m-0 p-0 fst-italic text-muted">Publisher: {{ book.publisher|default:"Unknown"|title }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% if user == book.publisher %}
+    <div class="w-100 d-flex justify-content-end mt-3" style="max-width: 50em;">
+        <div class="ms-auto btn-group">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                🔩 Configuration
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item btn btn-outline-success" href="{% url 'book_update' book.pk %}">Update</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item btn btn-outline-danger" href="{% url 'book_delete' book.pk %}">Delete</a></li>
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <section class="my-4 w-100 reviews-section" style="max-width: 40em;">
+        <h3>✉ Reviews ({{ book.reviews.all.count }})</h3>
+        <div class="border m-2 rounded-3 p-3">
+            {% if user.is_authenticated %}
+            <form class="m-2" method="post">{% csrf_token %}
+                {{ form|crispy }}
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <p class="p-0 m-0 fw-bold fs-6">As: <span class="text-primary">{{ user.get_full_name|default:user.username|title }}</span></p>
+                    <button class="btn btn-success fw-bold" type="submit">Review</button>
+                </div>
+            </form>
+            {% else %}
+            <div class="w-100 d-flex flex-column align-items-center p-3 gap-2">
+                <h4 class="text-pink fw-semibold">You need an account</h4>
+                <div>
+                    <a class="btn btn-success me-2" href="{% url 'account_login' %}?next={{request.path}}">Log in</a>
+                    or
+                    <a class="btn btn-danger ms-2" href="{% url 'account_signup' %}?next={{request.path}}">Sign Up</a>
+                </div>
+                <p class="text-muted">And start reviewing</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <ul class="p-0 list-unstyled">
+            {% for review in page_obj.object_list %}
+            <li class="review-item border border-2 rounded-2 d-flex flex-column p-3 my-2">
+                <h6 class="d-flex align-items-center mb-2">
+                    <span class="fw-bold text-pink">{{ review.author|title }}:</span>
+                    <span class="ms-auto text-muted small">{{ review.date|date:"d-m-Y" }}</span>
+                </h6>
+                <p class="m-0">{{ review }}</p>
+            </li>
+            {% empty %}
+            <p class="text-muted text-center my-4 fst-italic">No reviews yet, be the first to add one!</p>
+            {% endfor %}
+        </ul>
+
+        <div class="d-flex justify-content-center mt-4 pt-2 mb-5">
+            {% include 'components/pagination_block.html' %}
+        </div>
+    </section>
+</div>
+{% endblock content %}
+

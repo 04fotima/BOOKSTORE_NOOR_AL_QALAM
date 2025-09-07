@@ -1,0 +1,110 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %} About {% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+
+    <h2 class="text-center mb-5 fw-bold" style="color: #d6336c;">About This Website</h2>
+
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <p class="text-uppercase fw-semibold text-pink mb-1" style="color:#e83e8c;">Online Reviews</p>
+            <h3 class="fw-bold mb-3">Read <span class="text-danger">Everyday</span></h3>
+            <p class="text-muted">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <a href="{% url 'book_list' %}" class="btn btn-pink btn-lg rounded-pill fw-semibold" aria-label="check books">
+                Check Books
+            </a>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="{% static 'images/about/person-reading.png' %}" alt="person reading" class="img-fluid rounded shadow" style="max-height: 320px;">
+        </div>
+    </div>
+
+    <div class="bg-pink-light rounded-4 p-5 mb-5 d-flex flex-column flex-md-row align-items-center gap-4" style="background-color: #ffe4f0;">
+        <div class="position-relative flex-grow-1" style="max-width: 320px; height: 320px;">
+            <div class="bg-pink rounded-circle position-absolute" style="width: 280px; height: 280px; top: 20px; left: 20px; filter: blur(40px); opacity: 0.5;"></div>
+            <img src="{% static 'images/about/person-smiling.jpg' %}" alt="person smiling" class="rounded-circle shadow position-relative" style="width: 280px; height: 280px; object-fit: cover;">
+            <img src="{% static 'images/books-logo.png' %}" alt="bookstore logo" class="position-absolute" style="width: 90px; bottom: 0; left: -20px; filter: drop-shadow(0 0 5px #d6336c);">
+        </div>
+        <div class="flex-grow-1 text-dark">
+            <p class="mb-2 fst-italic">Get access to high quality reviews!</p>
+            <h3 class="fw-bold mb-3">Join online community <span class="text-danger">today</span></h3>
+            <p class="mb-4 text-muted">
+                Etiam velit purus, vehicula quis imperdiet dignissim, convallis vitae nisl. Nullam facilisi.
+                Pellentesque non pulvinar justo. Nullam eget neque ut tellus ornare ullamcorper ulla ambco mattis for nulla glavrida egesed!
+            </p>
+            <a href="{% url 'account_signup' %}" class="btn btn-outline-danger btn-lg rounded-pill fw-semibold" aria-label="sign up free">
+                Sign up for <b>Free</b>
+            </a>
+        </div>
+    </div>
+
+    <div class="row align-items-center bg-danger bg-opacity-10 rounded-4 p-5 mb-5">
+        <div class="col-md-6 text-danger">
+            <p class="mb-2 fst-italic">Learn to enjoy every minute of your reading</p>
+            <h3 class="fw-bold mb-3">Train Your Brain <span class="fw-bold">Today!</span></h3>
+            <p class="mb-4">
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            </p>
+            <a href="{% url 'book_list' %}" class="btn btn-outline-danger btn-lg rounded-pill fw-semibold" aria-label="check books">
+                Check Books
+            </a>
+        </div>
+        <div class="col-md-6 position-relative d-flex justify-content-center" style="min-height: 280px;">
+            <img src="{% static 'images/about/person-with-book.png' %}" alt="person reading 2" class="position-absolute rounded shadow" style="max-height: 280px; top: 0; left: 50%; transform: translateX(-50%);">
+            <img src="{% static 'images/books-logo.png' %}" alt="bookstore logo" class="position-absolute" style="width: 60px; top: 15px; right: 15px; filter: drop-shadow(0 0 3px #b02a37);">
+            <img src="{% static 'images/books-logo.png' %}" alt="bookstore logo" class="position-absolute" style="width: 60px; bottom: 15px; left: 15px; filter: drop-shadow(0 0 3px #b02a37);">
+        </div>
+    </div>
+
+    <div class="text-center mb-4">
+        <h3 class="fw-bold" style="color:#d6336c;">Innovations <span class="text-danger">in Online Reviews</span></h3>
+    </div>
+
+    <div class="row g-4 justify-content-center" style="max-width: 900px; margin: auto;">
+        <div class="col-md-6">
+            <img src="{% static 'images/about/pic1.png' %}" alt="innovation 1" class="img-fluid rounded shadow mb-3">
+            <div class="d-flex align-items-center gap-3 bg-white p-3 rounded shadow-sm">
+                <img src="{% static 'images/about/stain1.png' %}" alt="stain" style="width: 40px; height: 40px; opacity: 0.5;">
+                <div>
+                    <h5 class="mb-1 fw-bold text-danger">Virtual <span class="fw-bold">Conversations</span></h5>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et rem asperiores ab saepe optio quam, laborum nobis libero quas illo veritatis commodi cumque.
+                    </p>
+                </div>
+            </div>
+            <img src="{% static 'images/about/pic2.png' %}" alt="innovation 2" class="img-fluid rounded shadow mt-3">
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex align-items-center gap-3 bg-danger bg-opacity-25 p-3 rounded shadow-sm mb-3">
+                <div>
+                    <h5 class="mb-1 fw-bold text-danger">Modern <span class="fw-bold">Education</span></h5>
+                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et rem asperiores ab saepe optio quam, laborum nobis libero quas illo veritatis commodi cumque.
+                    </p>
+                </div>
+                <img src="{% static 'images/about/pic3.png' %}" alt="innovation 3" style="width: 100px; height: auto; border-radius: 0.5rem;">
+            </div>
+            <img src="{% static 'images/about/pic4.png' %}" alt="innovation 4" class="img-fluid rounded shadow mt-3">
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .btn-pink {
+        background-color: #e83e8c;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+    .btn-pink:hover, .btn-pink:focus {
+        background-color: #d6336c;
+        color: white;
+    }
+</style>
+
+{% endblock content %}

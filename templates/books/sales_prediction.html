@@ -1,0 +1,213 @@
+
+    <div class="d-flex flex-column justify-content-center align-items-center min-vh-100" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0); position: relative; overflow: hidden; padding: 30px;">
+
+  <!-- Orqa fonda chiroyli shakllar -->
+  <svg style="position: absolute; top: 20px; left: 20px; width: 100px; height: 100px; opacity: 0.15; transform: rotate(15deg);" viewBox="0 0 100 100" fill="#ec407a" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="50"/>
+  </svg>
+  <svg style="position: absolute; bottom: 30px; right: 40px; width: 120px; height: 120px; opacity: 0.12; transform: rotate(-10deg);" viewBox="0 0 100 100" fill="#f48fb1" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" rx="20"/>
+  </svg>
+
+  <!-- Form -->
+  <form method="post" action="{% url 'sales_prediction' %}" novalidate class="shadow p-5 rounded-4 text-center bg-white" style="max-width: 480px; width: 100%; position: relative; z-index: 10;">
+
+    {% csrf_token %}
+    
+    <h2 class="mb-4 fw-bold" style="color: #d81b60; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Predict Book Sales 📈</h2>
+    
+    <!-- Floating labels with inputs -->
+    {% for field in form %}
+      <div class="form-floating mb-4 position-relative">
+        {{ field }}
+        <label for="{{ field.id_for_label }}" class="floating-label">{{ field.label }}</label>
+        {% if field.errors %}
+          <div class="text-danger small mt-1">{{ field.errors }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    
+    <button type="submit" class="btn btn-pink btn-lg w-100 fw-bold text-white" style="border-radius: 50px; background: #ec407a; border: none; transition: background-color 0.3s ease, transform 0.2s ease;">
+      Predict Sales
+    </button>
+  </form>
+
+  {% if prediction is not None %}
+    <div class="alert alert-pink text-center shadow fade-in mt-4" role="alert" style="max-width: 420px; width: 100%; border-radius: 20px; font-weight: 600; font-size: 1.5rem; background: #f48fb1; color: white; position: relative; z-index: 10;">
+      Predicted Sales: <span class="fw-bold">{{ prediction }}</span>
+    </div>
+  {% endif %}
+
+  <h4 class="text-center fw-semibold my-5" style="color: #ad1457; width: 100%; max-width: 620px; position: relative; z-index: 10;">
+    Previous Predictions
+  </h4>
+
+  <ul class="list-group shadow" style="max-width: 620px; width: 100%; border-radius: 20px; overflow: hidden; padding: 0; position: relative; z-index: 10;">
+    {% for item in predictions %}
+      <li class="list-group-item d-flex justify-content-between align-items-center previous-item px-4 py-3" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0); border: none; margin-bottom: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3); font-size: 1rem;">
+        <div style="flex: 1; font-weight: 600; color: #880e4f; text-align: center;">Genre: <span style="font-weight: 400; color: #ad1457;">{{ item.genre }}</span></div>
+        <div style="flex: 1; text-align: center; color: #c2185b;">Published: <span style="font-weight: 400;">{{ item.published_date|date:"Y-m-d" }}</span></div>
+        <div style="flex: 1; text-align: center; font-weight: 600; color: #880e4f;">Price: <span style="font-weight: 400;">${{ item.price }}</span></div>
+        <div style="flex: 1; text-align: center; font-weight: 700; color: #d81b60;">Predicted Sales: <span>{{ item.predicted_sales }}</span></div>
+      </li>
+    {% empty %}
+      <li class="list-group-item text-center fst-italic text-muted">No predictions yet.</li>
+    {% endfor %}
+  </ul>
+
+</div>
+
+<style>
+/* Body & fonts */
+body {
+  background: #fce4ec;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Inputs default */
+form input, form select, form textarea {
+  border-radius: 12px !important;
+  border: 2px solid #ec407a !important;
+  padding: 15px !important;
+  font-size: 1.1rem !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+  text-align: center;
+  background: #fff !important;
+}
+
+/* Focus animation */
+form input:focus, form select:focus, form textarea:focus {
+  border-color: #d81b60 !important;
+  box-shadow: 0 0 10px #f48fb1 !important;
+  outline: none !important;
+}
+
+/* Floating label effect */
+.form-floating {
+  position: relative;
+}
+
+.form-floating input,
+.form-floating select,
+.form-floating textarea {
+  height: 60px !important;
+  padding: 1.6rem 1rem 0.4rem 1rem !important;
+  font-size: 1rem !important;
+  border-radius: 12px !important;
+}
+
+.floating-label {
+  position: absolute;
+  left: 15px;
+  top: 18px;
+  font-size: 1.1rem;
+  color: #ad1457;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.form-floating input:focus + .floating-label,
+.form-floating input:not(:placeholder-shown) + .floating-label,
+.form-floating select:focus + .floating-label,
+.form-floating select:not([value=""]) + .floating-label,
+.form-floating textarea:focus + .floating-label,
+.form-floating textarea:not(:placeholder-shown) + .floating-label {
+  top: 6px;
+  left: 15px;
+  font-size: 0.85rem;
+  color: #880e4f;
+  font-weight: 600;
+  background: #fff;
+  padding: 0 8px;
+  border-radius: 5px;
+}
+
+/* Button styling */
+.btn-pink {
+  background: #ec407a;
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-weight: 700;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  padding: 12px 0;
+}
+
+.btn-pink:hover {
+  background-color: #d81b60 !important;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(216, 27, 96, 0.5);
+}
+
+/* Previous predictions hover */
+.previous-item {
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.previous-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(233, 30, 99, 0.4);
+}
+
+/* Fade in */
+.fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  form, ul.list-group {
+    max-width: 90% !important;
+  }
+}
+/* Umumiy button stili */
+button, .btn {
+  padding: 8px 20px;           /* Kichikroq balandlik va kenglik */
+  font-size: 1rem;             /* O'rtacha o'lchamdagi shrift */
+  font-weight: 600;            /* Biroz qalinroq shrift */
+  border-radius: 30px;         /* Yumaloq burchaklar */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(236, 64, 122, 0.3);
+  background: linear-gradient(135deg, #ec407a, #d81b60);
+  color: white;
+  text-align: center;
+  user-select: none;
+  display: inline-block;
+  white-space: nowrap;
+  min-width: 120px; /* minimal kenglik */
+}
+
+/* Hover effekti */
+button:hover, .btn:hover {
+  background: linear-gradient(135deg, #d81b60, #b71c46);
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(216, 27, 96, 0.6);
+}
+
+/* Focus holat */
+button:focus, .btn:focus {
+  outline: none;
+  box-shadow: 0 0 12px 3px rgba(216, 27, 96, 0.7);
+}
+
+/* Disabled holat */
+button:disabled, .btn:disabled {
+  background: #f8bbd0;
+  color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+</style>

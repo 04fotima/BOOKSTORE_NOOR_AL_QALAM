@@ -1,0 +1,200 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load random_rgba_color %}
+
+{% block title %}
+🌸 My Books - Noor Al Qalam 🌸
+{% endblock title %}
+
+{% block content %}
+<div class="mx-auto d-flex flex-column w-100 align-items-center justify-content-start"
+     style="max-width: 80em; min-height: 85vh; padding: 2rem; background: linear-gradient(135deg, #fcefee, #f6e1f5, #f8f0e3); border-radius: 20px; box-shadow: 0 8px 20px rgba(214, 51, 132, 0.3);">
+
+    <div class="w-100 my-4 py-3 d-flex flex-column align-items-center text-center">
+        <h3 class="text-nowrap d-flex border-bottom border-3 border-pink pb-2 px-4 fs-1 fw-bold text-pink" style="letter-spacing: 2px;">
+            My Published Books
+        </h3>
+        <p class="m-0 p-0 fs-5 text-secondary fst-italic">Publisher: <span class="text-pink fw-semibold">{{ user|title }}</span></p>
+    </div>
+
+    {% if not my_books %}
+    <div class="container-sm d-flex flex-column justify-content-center align-items-center mt-5">
+        <picture>
+            <img class="img-fluid img-thumbnail border-0 rounded-4 shadow-sm" style="max-width: 18rem;"
+                src="{% static 'images/books-logo.png' %}"
+                alt="bookstore logo">
+        </picture>
+        <h2 class="mt-4 text-pink fw-semibold">No Results Found</h2>
+        <p class="text-muted fst-italic">Looks like you haven't published any books yet. Start creating your masterpiece! ✨</p>
+    </div>
+    {% else %}
+
+    <div class="container" style="max-width: 54em;">
+        {% for book in my_books %}
+        <article class="row w-100 mb-5 shadow-sm rounded-4 p-3 glass-effect"
+                 style="background: rgba(255, 240, 245, 0.8); box-shadow: 0 8px 15px rgba(255, 105, 180, 0.3); transition: transform 0.3s ease;">
+            <header class="col-12 col-md-4 mb-3 mb-md-0 d-flex justify-content-center align-items-center">
+                <a href="{{ book.get_absolute_url }}" class="text-decoration-none" aria-label="View {{ book.title }}">
+                    {% if book.cover %}
+                    <img class="img-thumbnail rounded-4 shadow" src="{{ book.cover.url }}" alt="Cover of {{ book.title }}"
+                         style="max-height: 16rem; object-fit: cover;">
+                    {% else %}
+                    <div class="border rounded-4 w-100 d-flex justify-content-center align-items-center fs-5 fw-bold text-center"
+                        style="min-height: 16rem; background-color: {% random_rgba_color 0.5 %}; color: #d63384;">
+                        {{ book.title|truncatechars:35 }}
+                    </div>
+                    {% endif %}
+                </a>
+            </header>
+            <div class="col-12 col-md-8 d-flex flex-column justify-content-between ps-md-4">
+                <h3 class="mb-2 fw-bold text-pink" style="letter-spacing: 1px;">
+                    <a href="{{ book.get_absolute_url }}" class="text-pink text-decoration-none hover-underline">
+                        {{ book.title }}
+                    </a>
+                </h3>
+                <div class="d-flex align-items-center mb-2" style="gap: 0.6rem;">
+                    <span class="fw-semibold text-muted">Author:</span>
+                    <form class="d-inline" action="{% url 'search_results' %}" method="get" style="display:inline;">
+                        <input type="hidden" name="q" value="{{ book.author }}" minlength="1" required>
+                        <button type="submit" class="btn btn-link p-0 text-decoration-underline text-pink fw-semibold"
+                                style="font-size: 1.1rem; cursor: pointer;">
+                            {{ book.author }}
+                        </button>
+                    </form>
+                </div>
+                <p class="mb-3 fs-5 fw-semibold text-secondary">Price: <span class="text-pink fs-4">${{ book.price }}</span></p>
+
+                <footer class="d-flex justify-content-between align-items-center mt-auto">
+                    <p class="m-0 p-0 fw-bold text-muted">
+                        Reviews: <span class="text-pink">{{ book.reviews.all.count }}</span>
+                    </p>
+                    <a href="{{ book.get_absolute_url }}" class="btn btn-outline-pink fw-semibold px-4 py-2 rounded-pill shadow-sm hover-scale">
+                        View Details
+                    </a>
+                </footer>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+    <div class="d-flex justify-content-center mt-5 pt-4 mb-5">
+        {% include 'components/pagination_block.html' %}
+    </div>
+</div>
+
+<style>
+    .text-pink {
+        color: #d63384 !important;
+    }
+    .border-pink {
+        border-color: #d63384 !important;
+    }
+    .btn-outline-pink {
+        color: #d63384;
+        border-color: #d63384;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .btn-outline-pink:hover,
+    .btn-outline-pink:focus {
+        background-color: #d63384;
+        color: #fff;
+        text-decoration: none;
+        box-shadow: 0 8px 15px rgba(214, 51, 132, 0.5);
+    }
+    .hover-underline:hover {
+        text-decoration: underline !important;
+        text-underline-offset: 3px;
+    }
+    .hover-scale:hover {
+        transform: scale(1.08);
+        transition: transform 0.3s ease;
+    }
+    /* Glass effect */
+    .glass-effect {
+        backdrop-filter: saturate(180%) blur(12px);
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 20px;
+    }
+    /* Article hover effect */
+    article:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(214, 51, 132, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+</style>
+{% endblock content %}
+
+
+
+
+{% comment %} {% extends "_base.html" %}
+{% load static %}
+{% load random_rgba_color %}
+
+{% block title %}
+My Books
+{% endblock title %}
+
+{% block content %}
+<div class="mx-auto d-flex flex-column w-100 align-items-center justify-content-start" style="max-width: 80em;">
+
+    <div class="w-100 my-2 py-2 d-flex flex-column align-items-center">
+        <h3 class="text-nowrap d-flex border-bottom border-2 p-1 px-3 fs-1 m-0">
+            My Published Books
+        </h3>
+        <p class="m-0 p-0 fs-5" >Publisher: {{ user|title }}</p>
+    </div>
+
+    {% if not my_books %}
+    <div class="container-sm d-flex flex-column justify-content-start align-items-center">
+        <picture>
+            <img class="img-fluid img-thumbnail border-0" src="{% static 'images/books-logo.png' %}"
+                alt="bookstore logo">
+        </picture>
+        <h2>No Results Found</h2>
+    </div>
+    {% else %}
+
+    <div class="container" style="max-width: 50em;">
+        {% for book in my_books %}
+        <article class="row w-100">
+            <header class="col col-4 col-md-3 ">
+                <a href="{{ book.get_absolute_url }}" class="text-decoration-none">
+                    {% if book.cover %}
+                    <img class="img-thumbnail" src="{{ book.cover.url }}" alt="book {{ book.title }}">
+                    {% else %}
+                    <div class="border w-100 d-flex justify-content-center align-items-center fs-5 fw-bold text-center "
+                        style="min-height: 10em; background-color: {% random_rgba_color 0.5 %} ;">
+                        {{ book.title|truncatechars:35 }}
+                    </div>
+                    {% endif %}
+                </a>
+            </header>
+            <div class="col col-8 col-md-9 d-flex flex-column">
+                <h3><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
+                <div class="d-flex">Author:
+                    <form class="d-flex w-100" style="max-width: 30em;" action="{% url 'search_results' %}" method="get">
+                        <input type="hidden" minlength="1" name="q" value="{{ book.author }}"
+                            placeholder="Search by title or author" aria-label="Search" required>
+                        <input class="border-0 link-secondary bg-transparent text-decoration-underline text-primary" style="outline:none;" type="submit" value="{{ book.author }}" />
+                    </form>
+                </div>
+                <p data-color="">Price: $ {{ book.price }}</p>
+                <footer class="w-100 mt-auto mb-3 d-flex justify-content-between">
+                    <p class="m-0 p-0 fw-bold">Reviews: {{ book.reviews.all.count }}</p>
+                </footer>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+    <div class="d-flex justify-content-center mt-auto pt-4 mb-5">
+        {% include 'components/pagination_block.html' %}
+    </div>
+</div>
+{% endblock content %} {% endcomment %}

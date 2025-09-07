@@ -1,0 +1,263 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load random_rgba_color %}
+
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+<div class="mx-auto d-flex flex-column w-100 align-items-center justify-content-start py-4 px-3" style="max-width: 80em; min-height: 80vh; background: linear-gradient(135deg, #FFD3E0 0%, #FFB3C6 100%); border-radius: 1rem; box-shadow: 0 8px 24px rgba(255, 105, 180, 0.3); animation: fadeInBg 1.5s ease forwards;">
+
+    <!-- Search Header -->
+    <div class="w-100 my-3 py-2 d-flex flex-column flex-md-row align-items-center justify-content-center gap-3">
+        <h3 class="text-nowrap d-flex border-bottom border-4 border-pink px-4 py-1 fs-1 fw-bold text-white shadow-sm animated-fadeInDown" style="font-family: 'Poppins', sans-serif; letter-spacing: 0.05em;">
+            Search Results:
+        </h3>
+        <p class="flex-grow-1 m-0 fs-3 fw-bold text-center text-white text-shadow animated-fadeInUp" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            “{{ query|title }}”
+        </p>
+    </div>
+
+    {% if not book_list %}
+        <div class="container-sm d-flex flex-column justify-content-center align-items-center py-5 animated-fadeIn">
+            <picture>
+                <img class="img-fluid img-thumbnail border-0 rounded-4 shadow-lg" src="{% static 'images/books-logo.png' %}" alt="bookstore logo" style="max-width: 18rem;">
+            </picture>
+            <h2 class="mt-4 fw-semibold text-pink" style="font-family: 'Georgia', serif;">No Results Found</h2>
+        </div>
+    {% else %}
+        <div class="container" style="max-width: 60em;">
+            {% for book in book_list %}
+                <div class="row w-100 mb-4 p-3 rounded-4 shadow-sm animated-fadeInUp" style="background: rgba(255, 255, 255, 0.8); backdrop-filter: saturate(180%) blur(15px); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                    <div class="col-12 col-md-4 d-flex justify-content-center align-items-center">
+                        <a href="{{ book.get_absolute_url }}" class="text-decoration-none rounded-3 overflow-hidden d-block shadow book-cover-link">
+                            {% if book.cover %}
+                                <img class="img-fluid rounded-3 animated-image-fadeIn" src="{{ book.cover.url }}" alt="book {{ book.title }}" style="max-height: 18rem; object-fit: cover;">
+                            {% else %}
+                                <div class="border rounded-3 w-100 d-flex justify-content-center align-items-center fs-5 fw-bold text-center text-pink"
+                                     style="min-height: 14rem; background-color: {% random_rgba_color 0.3 %}; font-family: 'Comic Sans MS', cursive, sans-serif;">
+                                    {{ book.title|truncatechars:35 }}
+                                </div>
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-8 d-flex flex-column justify-content-between ps-md-4 pt-3 pt-md-0">
+                        <h3 class="mb-2" style="font-family: 'Pacifico', cursive;">
+                            <a href="{{ book.get_absolute_url }}" class="text-decoration-none text-pink-hover">{{ book.title }}</a>
+                        </h3>
+                        <div class="d-flex align-items-center gap-2 mb-2" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                            <span class="fw-semibold">Author:</span>
+                            <form class="d-inline" action="{% url 'search_results' %}" method="get" style="display:inline;">
+                                <input type="hidden" minlength="1" name="q" value="{{ book.author }}" aria-label="Search by author" required>
+                                <button type="submit" class="btn btn-link p-0 fw-semibold text-decoration-underline text-pink-hover author-btn" style="font-size: 1.15rem;">
+                                    {{ book.author }}
+                                </button>
+                            </form>
+                        </div>
+                        <p class="fs-5 mb-3" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                            <strong>Price:</strong> <span class="text-pink">$ {{ book.price }}</span>
+                        </p>
+                        <footer class="w-100 mt-auto mb-0 d-flex justify-content-between text-pink fw-semibold" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                            <p class="m-0 p-0"><i class="bi bi-star-fill"></i> Reviews: {{ book.reviews.all.count }}</p>
+                            <p class="m-0 p-0">Publisher: {{ book.publisher|default:"Unknown"|title }}</p>
+                        </footer>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="d-flex justify-content-center mt-4 pt-3 mb-4 animated-fadeIn">
+        {% include 'components/pagination_block.html' with get_query="&q={{ query }}" %}
+    </div>
+
+</div>
+
+<!-- Custom Styles and Animations -->
+<style>
+    /* Fade In background */
+    @keyframes fadeInBg {
+        0% {opacity: 0;}
+        100% {opacity: 1;}
+    }
+
+    /* Fade In Up */
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Fade In Down */
+    @keyframes fadeInDown {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Fade In */
+    @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+
+    /* Image fade in */
+    @keyframes imageFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* Classes for animation */
+    .animated-fadeInUp {
+        animation: fadeInUp 0.7s ease forwards;
+    }
+    .animated-fadeInDown {
+        animation: fadeInDown 0.7s ease forwards;
+    }
+    .animated-fadeIn {
+        animation: fadeIn 1s ease forwards;
+    }
+    .animated-image-fadeIn {
+        animation: imageFadeIn 1s ease forwards;
+    }
+
+    /* Pink hover effect for links */
+    .text-pink-hover:hover {
+        color: #ff4d94 !important;
+        text-decoration: underline;
+        transition: color 0.3s ease, transform 0.3s ease;
+        transform: translateY(-3px);
+    }
+
+    /* Pink theme colors */
+    .text-pink {
+        color: #ff3377 !important;
+    }
+
+    /* Override button link styles inside form */
+    form button.btn-link {
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Author button hover lift */
+    .author-btn:hover {
+        color: #ff4d94 !important;
+        transform: translateY(-2px);
+        text-decoration: underline;
+    }
+
+    /* Card hover scale + shadow */
+    .row.w-100.mb-4.p-3.rounded-4.shadow-sm:hover {
+        transform: scale(1.03);
+        box-shadow: 0 15px 30px rgba(255, 105, 180, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        z-index: 10;
+        position: relative;
+        cursor: pointer;
+    }
+
+    /* Text shadows for better visibility */
+    .text-shadow {
+        text-shadow: 1px 1px 5px rgba(255, 105, 180, 0.6);
+    }
+
+    /* Responsive font sizing for headings */
+    @media (max-width: 576px) {
+        h3 {
+            font-size: 1.5rem !important;
+        }
+        p.fs-3 {
+            font-size: 1.2rem !important;
+        }
+    }
+</style>
+{% endblock content %}
+
+
+{% comment %} {% extends "_base.html" %}
+{% load static %}
+{% load random_rgba_color %}
+
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+<div class="mx-auto d-flex flex-column w-100 align-items-center justify-content-start" style="max-width: 80em;">
+
+    <div class="w-100 my-2 py-2 d-flex flex-column flex-md-row justify-content-center">
+        <h3 class="text-nowrap d-flex border-bottom border-2 p-1 px-3 fs-1 m-0">
+            Search Results:
+        </h3>
+        <p class="flex-grow-1 m-0 fs-3 fw-bold text-center">"{{ query|title }}"</p>
+    </div>
+
+    {% if not book_list %}
+    <div class="container-sm d-flex flex-column justify-content-start align-items-center">
+        <picture>
+            <img class="img-fluid img-thumbnail border-0" src="{% static 'images/books-logo.png' %}"
+                alt="bookstore logo">
+        </picture>
+        <h2>No Results Found</h2>
+    </div>
+    {% else %}
+
+    <div class="container" style="max-width: 50em;">
+        {% for book in book_list %}
+        <div class="row w-100">
+            <div class="col col-4 col-md-3 ">
+                <a href="{{ book.get_absolute_url }}" class="text-decoration-none">
+                    {% if book.cover %}
+                    <img class="img-thumbnail" src="{{ book.cover.url }}" alt="book {{ book.title }}">
+                    {% else %}
+                    <div class="border w-100 d-flex justify-content-center align-items-center fs-5 fw-bold text-center "
+                        style="min-height: 10em; background-color: {% random_rgba_color 0.5 %} ;">
+                        {{ book.title|truncatechars:35 }}
+                    </div>
+                    {% endif %}
+                </a>
+            </div>
+            <div class="col col-8 col-md-9 d-flex flex-column">
+                <h3><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h3>
+                <div class="d-flex">Author:
+                    <form class="d-flex w-100" style="max-width: 30em;" action="{% url 'search_results' %}" method="get">
+                        <input type="hidden" minlength="1" name="q" value="{{ book.author }}"
+                            placeholder="Search by title or author" aria-label="Search" required>
+                        <input class="border-0 link-secondary bg-transparent text-decoration-underline text-primary" style="outline:none;" type="submit" value="{{ book.author }}" />
+                    </form>
+                </div>
+                <p data-color="">Price: $ {{ book.price }}</p>
+                <footer class="w-100 mt-auto mb-3 d-flex justify-content-between">
+                    <p class="m-0 p-0 fw-bold">Reviews: {{ book.reviews.all.count }}</p>
+                    <p class="m-0 p-0 fw-bold">Publisher: {{ book.publisher|default:"Unknow"|title }}</p>
+                </footer>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+    <div class="d-flex justify-content-center mt-auto pt-4 mb-5">
+        {% include 'components/pagination_block.html' with get_query="&q={{ query }}" %}
+    </div>
+</div>
+{% endblock content %} {% endcomment %}

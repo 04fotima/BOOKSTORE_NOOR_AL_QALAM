@@ -1,0 +1,154 @@
+{% extends "_base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Update Book: {{ book.title }}
+{% endblock title %}
+
+{% block content %}
+<div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: 80vh; background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%); border-radius: 1rem; box-shadow: 0 12px 36px rgba(255, 105, 180, 0.25); animation: bgFadeIn 1.2s ease forwards;">
+  <div class="card shadow-lg p-4 rounded-4" style="max-width: 380px; width: 100%; background: linear-gradient(145deg, #fff0f6, #ffe6f2); animation: cardSlideUp 1s ease forwards;">
+    <div class="text-center mb-4">
+      <picture class="d-block mx-auto mb-3" style="width: 10rem; height: 14rem; overflow: hidden; border-radius: 1rem; box-shadow: 0 6px 16px rgba(255, 105, 180, 0.3); animation: imageFadeIn 1.2s ease forwards;">
+        <img id="preview_cover" class="img-fluid h-100 w-auto mx-auto d-block" alt="Book Cover Preview"
+          {% if book.cover %}
+          src="{{ book.cover.url }}"
+          {% else %}
+          src="{% static 'images/books-logo.png' %}"
+          {% endif %}
+          style="object-fit: cover; border-radius: 1rem;"
+        >
+      </picture>
+      <h2 class="fw-bold text-pink" style="font-family: 'Poppins', sans-serif; letter-spacing: 0.07em; animation: fadeInText 1.5s ease forwards;">
+        Update Book
+      </h2>
+      <p class="text-muted fst-italic mt-1" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <em>{{ book.title }}</em>
+      </p>
+    </div>
+    <form enctype="multipart/form-data" method="post" novalidate>
+      {% csrf_token %}
+      {{ form|crispy }}
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{{ book.get_absolute_url }}" class="btn btn-danger btn-shadow fw-bold px-4 py-2 hover-lift" title="Cancel update">
+          Cancel
+        </a>
+        <button type="submit" class="btn btn-success btn-shadow fw-bold px-4 py-2 hover-lift" title="Save changes">
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  /* Colors */
+  .text-pink {
+    color: #ff4d94 !important;
+  }
+  .btn-danger {
+    background-color: #ff4d94;
+    border-color: #ff4d94;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .btn-danger:hover, .btn-danger:focus {
+    background-color: #e03e7a;
+    border-color: #e03e7a;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(224, 62, 122, 0.5);
+  }
+  .btn-success {
+    background-color: #5cd65c;
+    border-color: #5cd65c;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .btn-success:hover, .btn-success:focus {
+    background-color: #4ec54e;
+    border-color: #4ec54e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(78, 197, 78, 0.5);
+  }
+  /* Button shadow */
+  .btn-shadow {
+    box-shadow: 0 4px 15px rgba(255, 77, 148, 0.3);
+  }
+  /* Hover lift effect */
+  .hover-lift:hover {
+    cursor: pointer;
+    transform: translateY(-4px);
+    transition: transform 0.3s ease;
+  }
+  /* Animations */
+  @keyframes bgFadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  @keyframes cardSlideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes imageFadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes fadeInText {
+    0% {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Input focus glowing */
+  input:focus, select:focus, textarea:focus {
+    border-color: #ff4d94 !important;
+    box-shadow: 0 0 8px #ff4d94cc !important;
+    outline: none !important;
+    transition: box-shadow 0.3s ease;
+  }
+
+  /* Form labels color */
+  label {
+    color: #d6336c;
+    font-weight: 600;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 480px) {
+    .card {
+      max-width: 100% !important;
+      padding: 2rem !important;
+    }
+  }
+</style>
+
+<script>
+  window.addEventListener("load", () => {
+    document.getElementById("id_cover").addEventListener("change", showImg)
+  })
+  function showImg(e) {
+    const preview_cover = document.getElementById("preview_cover");
+    const img = e.target.files[0];
+    if (img) {
+      preview_cover.src = URL.createObjectURL(img);
+      preview_cover.style.animation = "imageFadeIn 0.8s ease forwards";
+    }
+  }
+</script>
+{% endblock content %}

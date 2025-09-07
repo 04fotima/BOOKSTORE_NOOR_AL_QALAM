@@ -1,0 +1,150 @@
+<div class="cart-wrapper">
+  <h2 class="gradient-text glow-text title">Shopping Cart 🛒💖</h2>
+
+  <table class="table table-hover text-center align-middle cart-table">
+      <thead class="table-header">
+          <tr>
+              <th>Book</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for item in cart_items %}
+          <tr class="cart-item animate-row">
+              <td>{{ item.book.title }}</td>
+              <td>${{ item.book.price }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>${{ item.subtotal }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+  <h4 class="total-text">Total: ${{ total }}</h4>
+
+  <form method="POST" action="{% url 'checkout' %}" class="checkout-form">
+      {% csrf_token %}
+      <input type="text" name="full_name" placeholder="Full Name" required class="neon-input">
+      <input type="text" name="phone_number" placeholder="Phone Number" required class="neon-input">
+      <input type="text" name="card_number" placeholder="Card Number" required class="neon-input">
+      <button type="submit" class="btn neon-button">💖 Buy Now</button>
+  </form>
+</div>
+
+<style>
+  /* Wrapper centers all content vertically and horizontally */
+  .cart-wrapper {
+    min-height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertical center */
+    align-items: center;     /* horizontal center */
+    background: linear-gradient(135deg, #ffe6f0, #ffccde);
+    padding: 40px 20px;
+    box-sizing: border-box;
+    gap: 30px; /* space between children */
+  }
+
+  /* Title styling */
+  .title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #880e4f;
+    margin: 0;
+    user-select: none;
+  }
+
+  /* Table style */
+  .cart-table {
+    width: 90vw;
+    max-width: 600px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 25px rgba(255, 105, 180, 0.2);
+    background-color: rgba(255, 240, 245, 0.85);
+    border-collapse: collapse;
+  }
+  .table-header th {
+    background: linear-gradient(45deg, #ff69b4, #ff4081);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 12px 10px;
+  }
+  .cart-item td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #ffd6e8;
+  }
+  .cart-item:hover {
+    background-color: #ffd6e8;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Total text */
+  .total-text {
+    font-size: 1.8rem;
+    color: #b71c1c;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  /* Form container */
+  .checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 90vw;
+    max-width: 400px;
+  }
+
+  /* Neon input fields */
+  .neon-input {
+    border: none;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    box-shadow: 0 0 8px #ff69b4cc;
+    background-color: rgba(255, 182, 193, 0.15);
+    color: #880e4f;
+    font-weight: 600;
+    text-align: center;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+  .neon-input:focus {
+    outline: none;
+    box-shadow: 0 0 15px #ff4081;
+    background-color: #ffe6f0;
+    color: #6a0036;
+  }
+
+  /* Neon button style */
+  .neon-button {
+    background: linear-gradient(45deg, #ff4081, #ff6f91);
+    color: white;
+    font-weight: 700;
+    border: none;
+    padding: 16px 0;
+    font-size: 1.4rem;
+    border-radius: 30px;
+    box-shadow: 0 6px 20px rgba(255, 64, 129, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1.1px;
+  }
+  .neon-button:hover {
+    background: linear-gradient(45deg, #ff85c1, #ff6f91);
+    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.9);
+    transform: translateY(-3px) scale(1.05);
+    color: white;
+  }
+
+  /* Responsive */
+  @media (max-width: 576px) {
+    .cart-table, .checkout-form {
+      width: 95vw;
+    }
+  }
+</style>

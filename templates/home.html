@@ -1,0 +1,334 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load random_rgba_color %}
+
+{% block title %}
+🌸 Noor Al Qalam Bookstore ✨
+{% endblock title %}
+
+
+
+{% block content %}
+<div class="bookstore-bg">
+    <div class="mt-4 w-100 d-flex flex-column justify-content-start align-items-center">
+        <div class="bookstore-landscape d-flex flex-column justify-content-center align-items-center glass-effect p-5 mb-5">
+            <h1 class="gradient-text display-2 fw-bold glow-text" style="color: #d63384; text-shadow: 2px 2px 5px rgba(214, 51, 132, 0.5); font-size: 4rem;">
+                🌸 Noor Al Qalam ✨
+            </h1>
+        </div>
+       
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+       <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+        <div class="container d-md-flex flex-column flex-md-row my-4">
+            <section class="w-100 d-flex flex-column mb-4 glass-effect">
+                <h2 class="p-3 gradient-text border-bottom">
+                    ✨ Week's Selection Book ✨
+                </h2>
+                <picture class="w-75 align-self-center my-3">
+                    <img src="{% static 'images/dfp.jpg' %}" class="img-fluid rounded shadow" alt="django for professionals book">
+                </picture>
+                <blockquote class="blockquote text-center">
+                    <p class="fs-5 text-muted">William Vincent</p>
+                </blockquote>
+                <p class="fs-5 text-center">
+                    Django for Professionals takes your web development skills to the next level, teaching you how to build
+                    production-ready websites with Python and Django.
+                </p>
+                <div class="box d-flex justify-content-center">
+                    <a class="btn glass-button me-2 animate-button" target="_blank" href="https://app.gumroad.com/checkout">💖 Buy Now ($39)</a>
+                    <a class="btn glass-button ms-2 animate-button" target="_blank" href="https://djangoforprofessionals.com/introduction/">📖 Read a Sample</a>
+                </div>
+            </section>
+    
+            <section class="w-100 position-relative d-flex flex-column justify-content-start align-items-center">
+                <div class="position-sticky neumorphism-border d-flex flex-column text-center p-4 mx-4 glass-effect" style="top: 10em;">
+                    <h2 class="gradient-text">Stay Connected 💌</h2>
+                    <p>With your account</p>
+                    <div class="border border-light d-flex flex-column justify-content-start align-items-center py-4">
+                        {% if not user.is_authenticated %}
+                            <a class="btn neon-button fs-5 fw-bold animate-button" href="{% url 'account_login' %}">🌟 Log In</a>
+                            <p class="m-0 py-2">-- Or --</p>
+                            <a class="btn neon-button fs-5 fw-bold animate-button" href="{% url 'account_signup' %}">✨ Sign Up</a>
+                        {% else %}
+                            <p class="text-center">You're currently using</p>
+                            <p class="fs-3 gradient-text">{{ user.username|title }}</p>
+                            <p class="text-center">Account</p>
+                            <p>✨Welcome to Noor Al Qalam ✨</p>
+                        {% endif %}
+                    </div>
+                </div>
+    <title>Book Recommender & Planner</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<div class="container mt-5">
+    <h1 class="text-center mb-4">📚 Book Recommender & Planner</h1>
+
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>🔍 Get Book Recommendations</h5>
+        </div>
+        <div class="card-body">
+            <form id="recommendForm">
+                <div class="mb-3">
+                    <label for="age" class="form-label">Your Age</label>
+                    <input type="text" class="form-control" id="age" placeholder="e.g. 25">
+                </div>
+                <div class="mb-3">
+                    <label for="interests" class="form-label">Your Interests</label>
+                    <input type="text" class="form-control" id="interests" placeholder="e.g. Science, Fiction, Adventure">
+                </div>
+                <div class="mb-3">
+                    <label for="genre" class="form-label">Preferred Genre</label>
+                    <input type="text" class="form-control" id="genre" placeholder="e.g. Fantasy, Romance">
+                </div>
+                <button type="submit" class="btn btn-primary">Get Recommendations</button>
+            </form>
+            <div class="mt-3">
+                <strong>Results:</strong>
+                <p id="recommendationResult"></p>
+            </div>
+        </div>
+    </div>
+
+   
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>📝 Submit Book Review</h5>
+        </div>
+        <div class="card-body">
+            <form id="reviewForm">
+                <div class="mb-3">
+                    <label for="bookTitle" class="form-label">Book Title</label>
+                    <input type="text" class="form-control" id="bookTitle" placeholder="e.g. The Hobbit">
+                </div>
+                <div class="mb-3">
+                    <label for="reviewText" class="form-label">Your Review</label>
+                    <textarea class="form-control" id="reviewText" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Submit Review</button>
+            </form>
+            <div class="mt-3">
+                <strong>Message:</strong>
+                <p id="reviewResult"></p>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>📅 Create a Reading Planner</h5>
+        </div>
+        <div class="card-body">
+            <form id="plannerForm">
+                <div class="mb-3">
+                    <label for="bookNamePlanner" class="form-label">Book Title</label>
+                    <input type="text" class="form-control" id="bookNamePlanner" placeholder="e.g. War and Peace">
+                </div>
+                <div class="mb-3">
+                    <label for="totalPages" class="form-label">Total Pages</label>
+                    <input type="number" class="form-control" id="totalPages" placeholder="e.g. 500">
+                </div>
+                <div class="mb-3">
+                    <label for="days" class="form-label">Days to Complete</label>
+                    <input type="number" class="form-control" id="days" placeholder="e.g. 30">
+                </div>
+                <button type="submit" class="btn btn-info">Generate Plan</button>
+            </form>
+            <div class="mt-3">
+                <strong>Plan:</strong>
+                <p id="plannerResult"></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  
+    document.getElementById('recommendForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const age = document.getElementById('age').value;
+        const interests = document.getElementById('interests').value;
+        const genre = document.getElementById('genre').value;
+
+        const response = await fetch('/books/book-recommend/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ age, interests, genre })
+        });
+
+        const data = await response.json();
+        document.getElementById('recommendationResult').innerText = data.recommendations;
+    });
+
+
+    document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const bookTitle = document.getElementById('bookTitle').value;
+        const reviewText = document.getElementById('reviewText').value;
+
+        const response = await fetch('/books/book-review/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ bookTitle, reviewText })
+        });
+
+        const data = await response.json();
+        document.getElementById('reviewResult').innerText = data.message;
+    });
+
+
+    document.getElementById('plannerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const bookPlanTitle = document.getElementById('bookNamePlanner').value;
+        const totalPages = document.getElementById('totalPages').value;
+        const days = document.getElementById('days').value;
+
+        const response = await fetch('/books/reading-plan/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ bookPlanTitle, totalPages, days })
+        });
+
+        const data = await response.json();
+        document.getElementById('plannerResult').innerText = data.plan;
+    });
+</script>
+        </div>
+            <h2 class="gradient-text">🌟 Latest Books 🌟</h2>
+            <div class="d-flex flex-wrap justify-content-around align-items-start">
+                {% for book in last_5_books %}
+                <div class="card mb-4 shadow glass-effect" style="width: 18rem;">
+                    {% if book.cover %}
+                     <img class="card-img-top rounded" src="{{ book.cover.url }}" alt="{{ book.title }}">
+                    {% else %}
+                    <article class="card-img-top border d-flex justify-content-center align-items-center fs-5 fw-bold text-center"
+                             style="height: 10em; background-color: {% random_rgba_color 0.5 %};">
+                        {{ book.title|truncatechars:35 }}
+                    </article>
+                    {% endif %}
+                    <div class="card-body text-center">
+                        <h5 class="card-title gradient-text">{{ book.title }}</h5>
+                        <p class="card-text">
+                            <strong>Author:</strong> {{ book.author }}<br>
+                            <strong>Price:</strong> ${{ book.price }}<br>
+                            <strong>Genre:</strong> {{ book.genre }}<br>
+                            <strong>ISBN:</strong> {{ book.isbn }}<br>
+                            <strong>Rating:</strong> ⭐ {{ book.rating }} / 5<br>
+                            <strong>Pages:</strong> {{ book.pages }}<br>
+                            <strong>Published:</strong> {{ book.published_date }}<br>
+                            <strong>Description:</strong> {{ book.description|truncatechars:100 }}<br>
+                        </p>
+                        <a href="{{ book.get_absolute_url }}" class="btn neon-button mb-2 animate-button">📚 View Details</a>
+                        <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn neon-button mb-2 animate-button">🛒 Buy Now</button>
+                        </form>
+                        <form method="POST" action="{% url 'add_to_favorites' book.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn neon-button animate-button">❤️ Add to Favorites</button>
+                        </form>
+                        
+        
+            </div>
+            </div>
+            {% endfor %}
+            </div>
+        </section>
+       
+    </div>
+</div>
+
+<style>
+    .btn-primary {
+    background-color: #d6336c;
+    border-color: #d6336c;
+}
+.btn-primary:hover {
+    background-color: #a0254c;
+    border-color: #a0254c;
+}
+    .animate-button:hover {
+        transform: translateY(-3px) scale(1.05);
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 8px 15px rgba(255, 105, 180, 0.4);
+    }
+
+    .neon-button {
+        background: linear-gradient(45deg, #ff6f61, #ffb347);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.5);
+        transition: all 0.2s ease-in-out;
+    }
+
+    .neon-button:hover {
+        box-shadow: 0 8px 25px rgba(255, 105, 180, 0.7);
+    }
+
+    .bookstore-bg::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 182, 193, 0.3);
+        /* Pink pastel lighting */
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .bookstore-bg > div.mt-4 {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    /* Hover animation on book cards */
+    .card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 12px 25px rgba(214, 51, 132, 0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        z-index: 10;
+    }
+        .gradient-text {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+        }
+        .neon-button {
+            background-color: #ff7e5f;
+            color: white;
+            font-weight: bold;
+            border: none;
+        }
+        .neon-button:hover {
+            background-color: #feb47b;
+            color: #333;
+        }
+        .animate-button {
+            transition: all 0.3s ease;
+        }
+        .animate-button:hover {
+            transform: scale(1.05);
+        }
+    
+</style>
+
+{% endblock content %}

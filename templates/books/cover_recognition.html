@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kitob Janrini Aniqlash</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        h1, h2 {
+            color: #d81b60;
+            text-align: center;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(216, 27, 96, 0.3);
+        }
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(216, 27, 96, 0.2);
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+        .btn-upload {
+            background: #ec407a;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .btn-upload:hover {
+            background-color: #d81b60;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(216, 27, 96, 0.5);
+        }
+        .card {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            background: white;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 14px 30px rgba(233, 30, 99, 0.3);
+        }
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+        .card-body {
+            text-align: center;
+        }
+        .card-text strong {
+            color: #880e4f;
+            font-size: 1.1rem;
+        }
+        .card-text small {
+            color: #ad1457;
+            font-style: italic;
+        }
+        @media (max-width: 575px) {
+            .card-img-top {
+                height: 180px;
+            }
+            form {
+                padding: 20px;
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mb-4">Upload Book Cover & Detect Genre</h1>
+    
+    <form method="post" enctype="multipart/form-data" novalidate class="d-flex flex-column align-items-center">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-upload">Upload & Detect</button>
+    </form>
+
+    <hr class="mb-5" style="border-color: #f48fb1; max-width: 480px; margin-left: auto; margin-right: auto;">
+
+    <h2 class="mb-4">Uploaded Covers</h2>
+    <div class="row justify-content-center gx-4 gy-4">
+        {% for cover in covers %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
+                <div class="card shadow-sm" style="width: 100%; max-width: 300px;">
+                    <img src="{{ cover.image.url }}" class="card-img-top" alt="Book Cover">
+                    <div class="card-body">
+                        <p class="card-text"><strong>Genre:</strong> {{ cover.genre }}</p>
+                        <p class="card-text"><small>Uploaded: {{ cover.uploaded_at|date:"Y-m-d H:i" }}</small></p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center text-muted fst-italic" style="width: 100%; max-width: 480px; margin: 0 auto;">
+                No covers uploaded yet.
+            </p>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

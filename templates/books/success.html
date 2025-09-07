@@ -1,0 +1,67 @@
+<!-- shop/success.html -->
+<div class="success-wrapper">
+  <h2 class="gradient-text glow-text success-title">Thank you, {{ order.full_name }}! ✅</h2>
+  <p class="success-message">Your order has been successfully placed.</p>
+  <p class="success-message total-price">Total amount paid: <strong>${{ order.total_price }}</strong></p>
+  <a href="{% url 'home' %}" class="btn neon-button success-btn">🏠 Return to Home</a>
+</div>
+
+<style>
+  .success-wrapper {
+    min-height: 100vh; /* full screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertical center */
+    align-items: center;     /* horizontal center */
+    background: linear-gradient(135deg, #ffe6f0, #ffccde);
+    padding: 40px 20px;
+    box-sizing: border-box;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .success-title {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #880e4f;
+    user-select: none;
+    margin: 0;
+  }
+
+  .success-message {
+    font-size: 1.3rem;
+    color: #b71c1c;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .total-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ff4081;
+  }
+
+  .success-btn {
+    margin-top: 20px;
+    padding: 16px 40px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, #ff4081, #ff6f91);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0 6px 25px rgba(255, 64, 129, 0.7);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    user-select: none;
+  }
+
+  .success-btn:hover {
+    background: linear-gradient(45deg, #ff85c1, #ff6f91);
+    box-shadow: 0 10px 35px rgba(255, 105, 180, 0.9);
+    transform: translateY(-3px) scale(1.05);
+    color: white;
+  }
+</style>

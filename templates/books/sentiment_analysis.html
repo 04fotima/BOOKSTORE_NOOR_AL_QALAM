@@ -1,0 +1,155 @@
+{% extends '_base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center fw-bold" style="color: #d6336c; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        Sentiment Tahlil 📊
+    </h2>
+
+    <!-- Fikr qoldirish formasi -->
+    <form method="post" class="mb-5 shadow-sm p-4 rounded-4" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0); max-width: 600px; margin: 0 auto;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success btn-lg w-100 fw-semibold shadow-sm" style="border-radius: 50px; font-size: 1.1rem; transition: background-color 0.3s ease;">
+            Yuborish
+        </button>
+    </form>
+
+    <!-- Tahlil natijalari -->
+    <div class="row g-4">
+        {% for review in reviews %}
+        <div class="col-md-6">
+            <div class="card shadow review-card">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold" style="color: #880e4f;">{{ review.book.title }}</h5>
+                    <p class="card-text fst-italic" style="min-height: 60px; color: #4a148c;">
+                        "{{ review.content }}"
+                    </p>
+                    <p class="card-text mt-3">
+                        <strong>Natija:</strong>
+                        {% if review.sentiment == "Ijobiy" %}
+                            <span class="badge bg-success sentiment-badge positive">😊 {{ review.sentiment }}</span>
+                        {% elif review.sentiment == "Salbiy" %}
+                            <span class="badge bg-danger sentiment-badge negative">☹️ {{ review.sentiment }}</span>
+                        {% else %}
+                            <span class="badge bg-secondary sentiment-badge neutral">😐 {{ review.sentiment }}</span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text"><small class="text-muted">Yozilgan vaqt: {{ review.created_at|date:"d M Y H:i" }}</small></p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center fst-italic text-muted">Hozircha fikrlar mavjud emas.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+<style>
+/* Card umumiy ko‘rinishi */
+.review-card {
+    border-radius: 20px;
+    background: linear-gradient(145deg, #fce4ec, #f8bbd0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+
+.review-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px rgba(214, 51, 108, 0.4);
+}
+
+/* Card body text styling */
+.review-card .card-title {
+    transition: color 0.3s ease;
+}
+
+.review-card:hover .card-title {
+    color: #d6336c;
+}
+
+/* Sentiment badge styles with animations */
+.sentiment-badge {
+    font-size: 1rem;
+    padding: 8px 14px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+/* Smile animation for positive */
+.sentiment-badge.positive {
+    background-color: #4caf50 !important;
+    color: white !important;
+    animation-name: pulseGreen;
+}
+
+/* Sad animation for negative */
+.sentiment-badge.negative {
+    background-color: #e53935 !important;
+    color: white !important;
+    animation-name: shakeRed;
+}
+
+/* Neutral animation */
+.sentiment-badge.neutral {
+    background-color: #757575 !important;
+    color: white !important;
+    animation-name: pulseGray;
+}
+
+/* Animations */
+@keyframes pulseGreen {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes shakeRed {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px) rotate(-5deg); }
+    50% { transform: translateX(3px) rotate(5deg); }
+    75% { transform: translateX(-3px) rotate(-5deg); }
+}
+
+@keyframes pulseGray {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Button hover effect */
+form button.btn-success:hover {
+    background-color: #388e3c;
+    box-shadow: 0 8px 15px rgba(56, 142, 60, 0.5);
+}
+
+/* Form input styling */
+form input, form textarea, form select {
+    border-radius: 12px !important;
+    border: 1px solid #d6336c !important;
+    padding: 10px !important;
+    box-shadow: none !important;
+    font-size: 1rem !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+form input:focus, form textarea:focus, form select:focus {
+    border-color: #d6336c !important;
+    box-shadow: 0 0 8px #f48fb1 !important;
+    outline: none !important;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+    .review-card {
+        margin-bottom: 20px;
+    }
+}
+</style>

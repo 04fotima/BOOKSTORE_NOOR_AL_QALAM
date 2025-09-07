@@ -1,0 +1,80 @@
+{% extends '_base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-pink-600 fw-bold">Recommended Books for You 📚</h2>
+    <div class="row justify-content-center gx-4 gy-4">
+        {% for book in recommended_books %}
+        <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
+            <div class="card shadow-sm book-card" style="width: 100%; max-width: 320px; border-radius: 15px; overflow: hidden;">
+                {% comment %} <img src="{{ book.cover_image.url }}" class="card-img-top book-img" alt="{{ book.title }}" loading="lazy"> {% endcomment %}
+                <div class="card-body bg-pink-light p-3 text-center">
+                    <h5 class="card-title fw-bold" style="color:#880e4f;">{{ book.title }}</h5>
+                    <p class="card-text mb-1"><strong>Author:</strong> {{ book.author }}</p>
+                    <p class="card-text mb-1"><strong>Genre:</strong> {{ book.genre }}</p>
+                    <p class="card-text mb-3"><strong>Price:</strong> ${{ book.price }}</p>
+                    <p class="card-text mb-3"><strong>Rating:</strong> {{ book.rating }}</p>
+                    <a href="add_to_cart" class="btn btn-pink w-100 fw-semibold">Buy Now</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-muted fst-italic">No recommended books available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+/* Custom Pink Colors */
+.text-pink-600 {
+    color: #d6336c !important;
+}
+.bg-pink-light {
+    background-color: #fce4ec !important;
+}
+.btn-pink {
+    background-color: #d6336c;
+    border-color: #d6336c;
+    border-radius: 50px;
+    padding: 10px 0;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn-pink:hover {
+    background-color: #a0254c;
+    border-color: #a0254c;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(166, 37, 76, 0.5);
+}
+.book-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 8px 24px rgba(214, 51, 108, 0.15);
+}
+.book-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(214, 51, 108, 0.3);
+}
+.book-img {
+    height: 280px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    border-bottom: 4px solid #d6336c;
+}
+.book-card:hover .book-img {
+    transform: scale(1.05);
+}
+.card-title {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.card-text {
+    color: #5c1a3d;
+    font-size: 0.95rem;
+}
+@media (max-width: 575px) {
+    .book-img {
+        height: 220px;
+    }
+}
+</style>
+{% endblock %}
